@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import Optional
 import logging
 
-import uvicorn
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
@@ -13,7 +12,7 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
 
-from config import ADMIN_API_KEY, ADMIN_LOGIN, ADMIN_PASSWORD, ALLOWED_ORIGINS, APP_HOST, APP_PORT
+from config import ADMIN_API_KEY, ADMIN_LOGIN, ADMIN_PASSWORD, ALLOWED_ORIGINS
 from database import get_connection
 from support_bot import send_request
 
@@ -217,7 +216,3 @@ def update_request(
 
         cursor.execute("SELECT * FROM requests WHERE id = ?", (request_id,))
         return cursor.fetchone()
-
-
-if __name__ == "__main__":
-    uvicorn.run(app, host=APP_HOST, port=APP_PORT)
