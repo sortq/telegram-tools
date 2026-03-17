@@ -117,17 +117,17 @@ font-weight:700;
 
 <script>
 if (localStorage.getItem("adminAuth") !== "true") {
-  window.location.replace("/login.html");
+  window.location.replace("http://127.0.0.1:8000/login.html");
 }
 
-const API_BASE = "";
+const API_BASE = "http://127.0.0.1:8000";
 const ADMIN_API_KEY = localStorage.getItem("adminApiKey") || "";
 let currentFilter = "all";
 const searchInput = document.getElementById("searchInput");
 
 if (!ADMIN_API_KEY) {
   localStorage.removeItem("adminAuth");
-  window.location.replace("/login.html");
+  window.location.replace("http://127.0.0.1:8000/login.html");
 }
 
 function statusLabel(status) {
@@ -169,7 +169,7 @@ async function loadRequests() {
   if (response.status === 403) {
     localStorage.removeItem("adminAuth");
     localStorage.removeItem("adminApiKey");
-    window.location.replace("/login.html");
+    window.location.replace("http://127.0.0.1:8000/login.html");
     return;
   }
 
