@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ — Telegram Tools</title>
+<meta name="description" content="Ответы на самые популярные вопросы о Telegram Tools.">
+<link rel="icon" href="/static/favicon.png">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header class="topbar">
+<nav class="topbar-nav">
+<div class="topbar-left">
+<a class="brand" href="index.html">Telegram Tools</a>
+</div>
+<div class="topbar-right">
+<a href="index.html#tools">Продукты</a>
+<a href="faq.html">FAQ</a>
+<a href="https://t.me/gxdxvil" target="_blank" rel="noopener noreferrer">Наш Telegram</a>
+</div>
+</nav>
+</header>
+
+<main class="landing">
+<section class="hero faq-hero">
+<h1>Частые вопросы</h1>
+<p>Ответы на самые популярные вопросы о Telegram Tools.</p>
+</section>
+
+<section class="faq-page-section">
+<div class="faq-accordion">
+<button class="faq-item" type="button">
+<span>Как работает сервис?</span>
+<span class="faq-plus">+</span>
+</button>
+<div class="faq-answer">
+<p>Вы выбираете подходящий инструмент, отправляете заявку, после чего разработчик подключает решение и помогает запустить его в работу.</p>
+</div>
+
+<button class="faq-item" type="button">
+<span>Как происходит подключение инструмента?</span>
+<span class="faq-plus">+</span>
+</button>
+<div class="faq-answer">
+<p>После отправки заявки мы связываемся с вами в Telegram, уточняем детали и подключаем выбранный инструмент под ваш сценарий.</p>
+</div>
+
+<button class="faq-item" type="button">
+<span>Сколько времени занимает подключение?</span>
+<span class="faq-plus">+</span>
+</button>
+<div class="faq-answer">
+<p>Обычно подключение занимает от нескольких минут до одного часа, в зависимости от инструмента и ваших задач.</p>
+</div>
+
+<button class="faq-item" type="button">
+<span>Нужно ли устанавливать что-то дополнительно?</span>
+<span class="faq-plus">+</span>
+</button>
+<div class="faq-answer">
+<p>Нет, все инструменты работают через Telegram и не требуют отдельной установки на ваше устройство.</p>
+</div>
+
+<button class="faq-item" type="button">
+<span>Какие данные нужны для подключения?</span>
+<span class="faq-plus">+</span>
+</button>
+<div class="faq-answer">
+<p>Обычно достаточно вашего Telegram username, названия нужного инструмента и короткого комментария по задаче.</p>
+</div>
+
+<button class="faq-item" type="button">
+<span>Сколько стоит использование инструментов?</span>
+<span class="faq-plus">+</span>
+</button>
+<div class="faq-answer">
+<p>Стоимость зависит от выбранного инструмента и сценария использования. После заявки мы уточняем формат подключения и условия.</p>
+</div>
+
+<button class="faq-item" type="button">
+<span>Можно ли подключить несколько каналов?</span>
+<span class="faq-plus">+</span>
+</button>
+<div class="faq-answer">
+<p>Да, сервис позволяет работать сразу с несколькими каналами, особенно в инструментах для аналитики и мониторинга активности.</p>
+</div>
+
+<button class="faq-item" type="button">
+<span>Как работает поддержка?</span>
+<span class="faq-plus">+</span>
+</button>
+<div class="faq-answer">
+<p>Поддержка ведётся через Telegram. Мы отвечаем по подключению, настройке, обновлениям и вопросам по работе инструментов.</p>
+</div>
+
+<button class="faq-item" type="button">
+<span>Можно ли отказаться от сервиса?</span>
+<span class="faq-plus">+</span>
+</button>
+<div class="faq-answer">
+<p>Да, если инструмент больше не нужен, вы можете остановить использование сервиса и отключить подключение.</p>
+</div>
+
+<button class="faq-item" type="button">
+<span>Безопасно ли использовать инструменты?</span>
+<span class="faq-plus">+</span>
+</button>
+<div class="faq-answer">
+<p>Да, сервис работает на стабильной инфраструктуре, а подключение и поддержка проходят в контролируемом формате через Telegram.</p>
+</div>
+ </div>
+</section>
+</main>
+
+<footer class="site-footer">
+<div class="footer-inner">
+<div>
+<strong>Telegram Tools</strong>
+<p>Инструменты для анализа, мониторинга и роста Telegram-каналов.</p>
+</div>
+<div class="footer-links">
+<a href="index.html#tools">Продукты</a>
+<a href="faq.html">FAQ</a>
+<a href="https://t.me/gxdxvil" target="_blank" rel="noopener noreferrer">Наш Telegram</a>
+</div>
+</div>
+</footer>
+
+<script>
+document.querySelectorAll(".faq-item").forEach((item) => {
+  item.onclick = () => {
+    const answer = item.nextElementSibling;
+    const open = item.classList.toggle("is-open");
+
+    if (answer) {
+      answer.style.maxHeight = open ? `${answer.scrollHeight}px` : "0px";
+    }
+  };
+});
+</script>
+
+</body>
+</html>

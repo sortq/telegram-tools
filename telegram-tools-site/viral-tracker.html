@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Viral Post Tracker: отслеживание активности постов Telegram по лайкам, репостам и комментариям.">
+<title>Viral Post Tracker</title>
+<link rel="icon" href="/static/favicon.png">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header class="topbar">
+<nav class="topbar-nav">
+<div class="topbar-left">
+<div class="dropdown">
+<a class="dropdown-toggle" href="#">Продукты</a>
+<div class="dropdown-menu">
+<a href="viral-tracker.html">Viral Post Tracker</a>
+<a href="channel-analytics.html">Channel Analytics</a>
+<a href="growth-monitor.html">Growth Monitor</a>
+</div>
+</div>
+</div>
+<div class="topbar-right">
+<a href="https://t.me/gxdxvil" target="_blank" rel="noopener noreferrer">Наш Telegram</a>
+<a href="https://t.me/gxdxvil" target="_blank" rel="noopener noreferrer">Поддержка</a>
+</div>
+</nav>
+</header>
+
+<main class="product-page">
+<a class="product-back" href="index.html">← Назад</a>
+
+<section class="product-hero">
+<div class="product-panel">
+<h1>Viral Post Tracker</h1>
+<p>Инструмент для отслеживания вирусных Telegram-постов по гибко настраиваемым условиям активности. Вы можете подключить 10, 50, 100, 200 и больше новостных каналов, а бот будет постоянно анализировать новые публикации и моментально отправлять сигнал, как только пост достигает заданного вами порога.</p>
+<div class="product-meta">
+<span class="product-pill">Лайки</span>
+<span class="product-pill">Репосты</span>
+<span class="product-pill">Комментарии</span>
+<span class="product-pill">Гибкие фильтры</span>
+</div>
+<button type="button" class="product-cta order-btn" data-bot="Viral Post Tracker">Подключить</button>
+</div>
+
+<div class="product-preview">
+<div class="preview-card">
+<span class="preview-label">Обзор</span>
+<div class="preview-window">Активность за 24 часа
+
+@news_hub
+Лайки: 2 180
+Репосты: 842
+Комментарии: 119</div>
+</div>
+<div class="preview-card">
+<span class="preview-label">Сигнал</span>
+<div class="preview-window">Всплеск активности
+
+Пост: Главная новость дня
+Репосты: +216 за 30 минут
+Комментарии: +34</div>
+</div>
+</div>
+</section>
+
+<section class="product-section">
+<h2>Что умеет бот</h2>
+<div class="shot-grid">
+<div class="shot-card">
+<strong>Отслеживание любого числа каналов</strong>
+Вы сами задаёте, сколько новостных каналов отслеживать: 10, 50, 100, 200 или больше.
+</div>
+<div class="shot-card">
+<strong>Гибкие условия вирусности</strong>
+Можно настроить фильтры: например, 100 репостов за 5 минут, 500 лайков за 10 минут, всплеск просмотров или резкий рост комментариев.
+</div>
+<div class="shot-card">
+<strong>Моментальные уведомления</strong>
+Как только пост достигает нужного порога, бот сразу присылает сам пост, ссылку на канал и текущую статистику.
+</div>
+</div>
+</section>
+
+<section class="product-section">
+<h2>Пример уведомления</h2>
+<div class="notification-example">📩 Активный пост
+
+Канал: @news_hub
+Пост: Главная новость дня
+Лайки: 2 180
+Репосты: 842
+Комментарии: 119
+Просмотры: 31 400</div>
+</section>
+
+<section class="product-section">
+<h2>Что можно настраивать</h2>
+<ul class="feature-list">
+<li>Количество каналов для отслеживания</li>
+<li>Временное окно: например 5 или 10 минут</li>
+<li>Минимальное количество лайков</li>
+<li>Минимальное количество репостов</li>
+<li>Минимальное количество комментариев</li>
+<li>Минимальное количество просмотров</li>
+</ul>
+<p>То есть вы сами решаете, что именно считать вирусным постом, а бот только мгновенно находит публикации, которые попали под ваши правила.</p>
+</section>
+</main>
+
+<div class="modal" id="subscribeModal">
+<div class="modal-content">
+<span class="close" id="close-modal">&times;</span>
+<h2>Подключение бота</h2>
+<form class="modal-form">
+<label for="modal-username">Telegram username</label>
+<input id="modal-username" name="username" type="text" placeholder="@username">
+<label for="botInput">Какой бот</label>
+<input id="botInput" name="bot-name" type="text" placeholder="Какой бот">
+<label for="modal-comment">Комментарий</label>
+<textarea id="modal-comment" name="comment" rows="5" placeholder="Опишите задачу"></textarea>
+<button type="submit">Отправить заявку</button>
+</form>
+</div>
+</div>
+
+<div id="successMessage" class="success-message">Заявка отправлена</div>
+
+<script>
+const modal = document.getElementById("subscribeModal");
+const botInput = document.getElementById("botInput");
+const usernameInput = document.getElementById("modal-username");
+const commentInput = document.getElementById("modal-comment");
+const modalForm = document.querySelector(".modal-form");
+const submitBtn = modalForm.querySelector("button");
+const successMessage = document.getElementById("successMessage");
+
+document.querySelectorAll(".order-btn").forEach((btn) => {
+  btn.onclick = () => {
+    botInput.value = btn.dataset.bot || "";
+    usernameInput.value = "";
+    commentInput.value = "";
+    modal.style.display = "flex";
+  };
+});
+
+document.getElementById("close-modal").onclick = () => {
+  modal.style.display = "none";
+};
+
+window.onclick = (e) => {
+  if (e.target === modal) {
+    modal.style.display = "none";
+  }
+};
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    modal.style.display = "none";
+  }
+});
+
+modalForm.onsubmit = async (e) => {
+  e.preventDefault();
+
+  const payload = {
+    username: usernameInput.value.trim(),
+    bot_name: botInput.value.trim(),
+    comment: commentInput.value.trim()
+  };
+
+  if (!payload.username) {
+    alert("Укажите Telegram username");
+    return;
+  }
+
+  if (!payload.username.startsWith("@")) {
+    payload.username = "@" + payload.username;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Отправка...";
+
+  try {
+    const response = await fetch("/send-request", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+    if (!response.ok || data.status !== "saved") {
+      throw new Error(data.detail || data.error || "Request failed");
+    }
+
+    modalForm.reset();
+    modal.style.display = "none";
+    successMessage.style.display = "block";
+    setTimeout(() => {
+      successMessage.style.display = "none";
+    }, 2500);
+  } catch (error) {
+    alert(`Не удалось отправить заявку: ${error.message}`);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Отправить заявку";
+  }
+};
+</script>
+
+</body>
+</html>

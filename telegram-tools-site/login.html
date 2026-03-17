@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login</title>
+<link rel="icon" href="/static/favicon.png">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header class="topbar">
+<nav class="topbar-nav">
+<div class="topbar-left">
+<a class="brand" href="index.html">Telegram Tools</a>
+</div>
+<div class="topbar-right">
+<a href="index.html#tools">Продукты</a>
+<a href="faq.html">FAQ</a>
+<a href="https://t.me/gxdxvil" target="_blank" rel="noopener noreferrer">Наш Telegram</a>
+</div>
+</nav>
+</header>
+
+<main class="landing">
+<section class="hero faq-hero">
+<h1>Вход администратора</h1>
+<p>Авторизуйтесь, чтобы открыть панель заявок.</p>
+</section>
+
+<section class="faq-page-section">
+<div class="login-card">
+<form id="loginForm" class="modal-form">
+<label for="loginInput">Логин</label>
+<input id="loginInput" name="login" type="text" placeholder="admin">
+
+<label for="passwordInput">Пароль</label>
+<input id="passwordInput" name="password" type="password" placeholder="••••••••">
+
+<button id="loginButton" type="submit">Войти</button>
+</form>
+<p id="loginError" class="login-error"></p>
+</div>
+</section>
+</main>
+
+<script>
+if (localStorage.getItem("adminAuth") === "true") {
+  window.location.replace("/admin");
+}
+
+const loginForm = document.getElementById("loginForm");
+const loginButton = document.getElementById("loginButton");
+const loginError = document.getElementById("loginError");
+
+loginForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  loginError.textContent = "";
+  loginButton.disabled = true;
+  loginButton.textContent = "Проверка...";
+
+  try {
+    const response = await fetch("/admin-login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        login: document.getElementById("loginInput").value.trim(),
+        password: document.getElementById("passwordInput").value
+      })
+    });
+
+    const data = await response.json();
+    if (!response.ok || data.status !== "ok") {
+      throw new Error(data.detail || "Неверный логин или пароль");
+    }
+
+    localStorage.setItem("adminAuth", "true");
+    localStorage.setItem("adminApiKey", data.api_key || "");
+    window.location.replace("/admin");
+  } catch (error) {
+    loginError.textContent = error.message;
+  } finally {
+    loginButton.disabled = false;
+    loginButton.textContent = "Войти";
+  }
+});
+</script>
+
+</body>
+</html>

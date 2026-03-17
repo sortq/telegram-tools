@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
+<link rel="icon" href="/static/favicon.png">
+<style>
+body{
+font-family: Arial, sans-serif;
+background:#0f0f0f;
+color:#fff;
+margin:0;
+padding:32px;
+}
+
+h1{
+margin:0 0 24px;
+}
+
+.filters{
+display:flex;
+gap:10px;
+margin-bottom:20px;
+flex-wrap:wrap;
+}
+
+.toolbar{
+display:flex;
+gap:12px;
+align-items:center;
+justify-content:space-between;
+margin-bottom:20px;
+flex-wrap:wrap;
+}
+
+.search{
+width:260px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:#162235;
+}
+
+th, td{
+border:1px solid #243247;
+padding:12px;
+text-align:left;
+vertical-align:top;
+}
+
+th{
+background:#111827;
+}
+
+input{
+width:180px;
+padding:8px 10px;
+border-radius:6px;
+border:1px solid #243247;
+background:#0f1724;
+color:#fff;
+}
+
+button{
+margin:4px 6px 0 0;
+padding:8px 12px;
+border:none;
+border-radius:6px;
+background:#2f80ed;
+color:#fff;
+cursor:pointer;
+}
+
+.done-btn{
+background:#1f9d62;
+}
+
+.filter-btn.active{
+background:#1f9d62;
+}
+
+.status{
+font-weight:700;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Заявки</h1>
+
+<div class="toolbar">
+<div class="filters">
+<button class="filter-btn active" onclick="setFilter('all', this)">Все</button>
+<button class="filter-btn" onclick="setFilter('new', this)">Новые</button>
+<button class="filter-btn" onclick="setFilter('in_progress', this)">В работе</button>
+<button class="filter-btn" onclick="setFilter('done', this)">Выполненные</button>
+</div>
+<input id="searchInput" class="search" type="text" placeholder="Поиск по username, боту, комментарию">
+</div>
+
+<table id="requestsTable">
+<tr>
+<th>ID</th>
+<th>Username</th>
+<th>Bot</th>
+<th>Comment</th>
+<th>Status</th>
+<th>Developer</th>
+<th>Actions</th>
+</tr>
+</table>
+
+<script>
+if (localStorage.getItem("adminAuth") !== "true") {
+  window.location.replace("/login.html");
+}
+
+const API_BASE = "";
+const ADMIN_API_KEY = localStorage.getItem("adminApiKey") || "";
+let currentFilter = "all";
+const searchInput = document.getElementById("searchInput");
+
+if (!ADMIN_API_KEY) {
+  localStorage.removeItem("adminAuth");
+  window.location.replace("/login.html");
+}
+
+function statusLabel(status) {
+  if (status === "new") return "new";
+  if (status === "in_progress") return "in_progress";
+  if (status === "done") return "done";
+  return status;
+}
+
+function actionButtons(request) {
+  const id = request.id;
+  const status = request.status;
+
+  if (status === "new") {
+    return `<button onclick="updateRequest(${id}, 'in_progress')">Принять</button>`;
+  }
+
+  if (status === "in_progress") {
+    return `<button class="done-btn" onclick="updateRequest(${id}, 'done')">Выполнено</button>`;
+  }
+
+  return "";
+}
+
+function setFilter(filter, button) {
+  currentFilter = filter;
+  document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+  button.classList.add("active");
+  loadRequests();
+}
+
+async function loadRequests() {
+  const response = await fetch(`${API_BASE}/requests`, {
+    headers: {
+      "X-ADMIN-KEY": ADMIN_API_KEY
+    }
+  });
+
+  if (response.status === 403) {
+    localStorage.removeItem("adminAuth");
+    localStorage.removeItem("adminApiKey");
+    window.location.replace("/login.html");
+    return;
+  }
+
+  const data = await response.json();
+  const table = document.getElementById("requestsTable");
+  const searchTerm = searchInput.value.trim().toLowerCase();
+  const filteredData = data
+    .filter(r => currentFilter === "all" ? true : r.status === currentFilter)
+    .filter(r => {
+      if (!searchTerm) return true;
+      return [r.username, r.bot, r.comment, r.developer || "", r.created_at || ""]
+        .join(" ")
+        .toLowerCase()
+        .includes(searchTerm);
+    });
+
+  table.querySelectorAll("tr:not(:first-child)").forEach(row => row.remove());
+
+  filteredData.forEach((r) => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${r.id}</td>
+      <td>${r.username}</td>
+      <td>${r.bot}</td>
+      <td>${r.comment}</td>
+      <td class="status">${statusLabel(r.status)}</td>
+      <td>
+        <input id="dev-${r.id}" type="text" value="${r.developer || ""}" placeholder="Разработчик">
+      </td>
+      <td>${actionButtons(r)}</td>
+    `;
+
+    table.appendChild(row);
+  });
+}
+
+async function updateRequest(id, status) {
+  const developer = document.getElementById(`dev-${id}`).value;
+
+  await fetch(`${API_BASE}/requests/${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-ADMIN-KEY": ADMIN_API_KEY
+    },
+    body: JSON.stringify({
+      status,
+      developer
+    })
+  });
+
+  await loadRequests();
+}
+
+searchInput.addEventListener("input", () => {
+  loadRequests();
+});
+
+loadRequests();
+</script>
+
+</body>
+</html>
